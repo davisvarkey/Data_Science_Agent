@@ -11,6 +11,20 @@ Usually data science tasks can be time-consuming, especially when working with l
 -   Execute large tabular data operations with GPU acceleration
 
 
-![images\agent.png](images/agent.png)
+## GPU Acceleration in Just 2 Lines of Code
+### The Setup
+Traditional pandas operations run on CPU. With NVIDIA's cudf.pandas, you get massive speedups without changing your code.
+
+import cudf.pandas
+cudf.pandas.install()
+
+After these two lines, your pandas code automatically runs on GPU when beneficial.
+
+![pandas](images/pandas.png)
+
+
+
+
+![agent](images/agent.png)
 
 
