@@ -11,6 +11,6 @@ Usually data science tasks can be time-consuming, especially when working with l
 -   Execute large tabular data operations with GPU acceleration
 
 
-![Alt text](images\agent.png)
+![images\agent.png](images/agent.png)
 
 
