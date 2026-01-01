@@ -15,7 +15,8 @@ Usually data science tasks can be time-consuming, especially when working with l
 ### The Setup
 Traditional pandas operations run on CPU. With NVIDIA's cudf.pandas, you get massive speedups without changing your code.
 
-~~~import cudf.pandas
+~~~
+import cudf.pandas
 cudf.pandas.install()
 ~~~
 
