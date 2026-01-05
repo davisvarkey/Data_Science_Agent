@@ -61,6 +61,8 @@ When user prompts the agent, it processes the request and runs the agentic loop,
         3. Generate and run pandas code
         4. Return results
 
+![toolcall](images/flow_chart_tool_call.png)
+
 agnetic loop will call the call_tool funciton defined in tools.py which is responsible for actually executing the tools requested by the LLM.
 
 It takes a tool_name and arguments, looks up the corresponding function in TOOL_FUNCTIONS, and executes it.
