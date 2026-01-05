@@ -117,7 +117,7 @@ The DataFrame has 39,717 rows and 111 columns.
 
 ### 🤖 Agent:
 ======================================================================
-### USER PROMPT: what is the currect column in the dataframe? 
+### USER PROMPT: what are the columns in the dataframe? 
 ======================================================================
 
 
@@ -131,6 +131,7 @@ The DataFrame has 39,717 rows and 111 columns.
   "mode": "gpu_accelerated",
   "execution_time_seconds": 0.0162
 }
+
 [Agent Response]
 ['id', 'member_id', 'loan_amnt', 'funded_amnt', 'funded_amnt_inv', 'term', 'int_rate', 'installment', 'grade', 'sub_grade', 'loan_status']
 
