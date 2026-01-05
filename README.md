@@ -68,13 +68,10 @@ It takes a tool_name and arguments, looks up the corresponding function in TOOL_
 The flow is as follows:
 
 The agent sends the user prompt and conversation history to the LLM.
-The LLM returns a response, which may include tool calls (e.g., 
-execute_python_code
-).
-The agent iterates through these tool calls in the 
-_run_agent_loop
- method.
-For each tool call, it parses the arguments and calls call_tool
+The LLM returns a response, which may include tool calls (e.g.,execute_python_code).
+The agent iterates through these tool calls in the _run_agent_loop method.
+
+For each tool call, it parses the arguments and calls call_tool method as follows:
 
 result = call_tool(tool_name, **arguments)
 
@@ -84,72 +81,57 @@ In this context, arguments is a dictionary (e.g., {"code": "print('hello')", "us
 
 Using **arguments unpacks that dictionary into keyword arguments, so the call:
 
-python
-call_tool(tool_name, **arguments)
-Is exactly equivalent to writing:
+python call_tool(tool_name, **arguments) Is exactly equivalent to writing:
 
 python
 call_tool(tool_name, code="print('hello')", use_gpu=True)
 It allows the code to be dynamic, passing whatever arguments the LLM generated directly to the function without knowing them in advance.
 
+call_tool() function use global PERSISTENT_NAMESPACE dictionary to maintain state across multiple tool calls and user prompts. This allows the agent to build on previous context and data manipulations.
+
 ## sample prompts and results
 
-### Prompt with streaming resposne
+### 1. Prompt with streaming resposne
 💬 You: how many rows and columns are there?
 
-🤖 Agent:
+### 🤖 Agent:
 ======================================================================
-USER PROMPT: how many rows and columns are there?
+### USER PROMPT: how many rows and columns are there?
 ======================================================================
 
-  Streaming response: The DataFrame has 42,448,764 rows and 9 columns.
+  Streaming response: The DataFrame has 39,717 rows and 111 columns.
 
 [AGENT RESPONSE]
 ----------------------------------------------------------------------
-The DataFrame has 42,448,764 rows and 9 columns.
+The DataFrame has 39,717 rows and 111 columns.
 ----------------------------------------------------------------------
 
 [Agent Response]
-The DataFrame has 42,448,764 rows and 9 columns.
+The DataFrame has 39,717 rows and 111 columns.
 
-### Prompt with code execution
+### 2. Prompt with code execution
 
-💬 You: show me the first 5 rows
+💬 You: what is the currect column in the dataframe? 
 
-🤖 Agent:
+### 🤖 Agent:
 ======================================================================
-USER PROMPT: show me the first 5 rows
+### USER PROMPT: what is the currect column in the dataframe? 
 ======================================================================
 
-  Calling: execute_python_code{"code":"print(df.head())"}
+
+  Calling: execute_python_code{"code":"print(df.columns.tolist())"}
   -> Calling tool: execute_python_code
     use_gpu: True
     code:
-      print(df.head())
+      print(df.columns.tolist())
 {
   "success": true,
   "mode": "gpu_accelerated",
-  "execution_time_seconds": 3.1402
+  "execution_time_seconds": 0.0162
 }
 [Agent Response]
-                event_time event_type  product_id          category_id  \
-0  2019-10-01 00:00:00 UTC       view    44600062  2103807459595387724   
-1  2019-10-01 00:00:00 UTC       view     3900821  2053013552326770905   
-2  2019-10-01 00:00:01 UTC       view    17200506  2053013559792632471   
-3  2019-10-01 00:00:01 UTC       view     1307067  2053013558920217191   
-4  2019-10-01 00:00:04 UTC       view     1004237  2053013555631882655   
-                         category_code     brand    price    user_id  \
-0                                 <NA>  shiseido    35.79  541312140   
-1  appliances.environment.water_heater      aqua    33.20  554748717   
-2           furniture.living_room.sofa      <NA>   543.10  519107250   
-3                   computers.notebook    lenovo   251.74  550050854   
-4               electronics.smartphone     apple  1081.98  535871217   
-                           user_session  
-0  72d76fde-8bb3-4e00-8c23-a032dfed738c  
-1  9333dfbd-b87a-4708-9857-6336556b0fcc  
-2  566511c2-e2e3-422b-b695-cf8e6e792ca8  
-3  7c90fc70-0e80-4590-96f3-13c02c18c713  
-4  c6bd7419-2748-4c56-95b4-8cec9ff8b80d  
+['id', 'member_id', 'loan_amnt', 'funded_amnt', 'funded_amnt_inv', 'term', 'int_rate', 'installment', 'grade', 'sub_grade', 'loan_status']
+
 
 Original notebook can be found here 
 
